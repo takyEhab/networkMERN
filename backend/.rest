@@ -1,0 +1,45 @@
+POST http://localhost:8000/user/register
+content-type: application/json
+
+{
+  "username": "taky",
+  "password": "123",
+  "password2": "123"
+}
+
+###
+POST http://localhost:8000/login
+content-type: application/json
+
+{
+  "username": "taky",
+  "password": "123"
+}
+
+###
+GET http://localhost:8000/profile
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI5YmI1MmM1ZGFmZTE5ZTRlOTc1ZWMxIiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU0MzcxNjI4LCJleHAiOjE2NTQ2MzA4Mjh9.7IaZ3StRNQEsnI8uYo6d8Bv9FJ6P9lf6OEVrzzXh_LM
+
+###
+GET http://localhost:8000/logout
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI5YmI1MmM1ZGFmZTE5ZTRlOTc1ZWMxIiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU0MzcxNjI4LCJleHAiOjE2NTQ2MzA4Mjh9.7IaZ3StRNQEsnI8uYo6d8Bv9FJ6P9lf6OEVrzzXh_LM
+
+###
+
+GET http://localhost:8000/posts/get-all HTTP/1.1
+
+
+### 
+
+POST http://localhost:8000/posts/add
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhODZmMTg1ZmMxODg3ZDNiMmEzMGU0IiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU1MjA4NzM1LCJleHAiOjE2NTU0Njc5MzV9.-h3aHqYIOuL145-iYhpSJf9oOw-Wuitz1xva4zj37tU
+content-type: application/json
+
+{
+  "post": "taky"
+}
+
+###
+
+
+
