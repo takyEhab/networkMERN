@@ -1,20 +1,20 @@
 import { ActionTypes } from "./actionTypes";
 import { combineReducers } from "redux";
 
-const postsStateI = {
+const postsStateInitial = {
   posts: null,
   isLoading: true,
   error: "",
 };
 
-const myInfoStateI = {
+const myInfoStateInitial = {
   infoIsLoading: true,
   myInfo: null,
   isLoggedIn: false,
   CONFIG: JSON.parse(localStorage.getItem("CONFIG")),
 };
 
-const postsReducer = (state = postsStateI, action) => {
+const postsReducer = (state = postsStateInitial, action) => {
   switch (action.type) {
     case ActionTypes.ADD_POSTS:
       return {
@@ -23,6 +23,8 @@ const postsReducer = (state = postsStateI, action) => {
         posts: action.payload,
         error: "",
       };
+    case ActionTypes.Remove_POSTS:
+      return postsStateInitial;
     case ActionTypes.ERROR:
       return {
         ...state,
@@ -36,7 +38,7 @@ const postsReducer = (state = postsStateI, action) => {
       return { ...state };
   }
 };
-const myInfoReducer = (state = myInfoStateI, action) => {
+const myInfoReducer = (state = myInfoStateInitial, action) => {
   switch (action.type) {
     case ActionTypes.LOGIN:
       return {

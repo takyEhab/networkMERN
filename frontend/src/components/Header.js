@@ -57,7 +57,7 @@ export default function Header() {
   const myInfoState = useSelector(state => state.myInfoState)
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
-  const { refresh } = useContext(funcContext)
+  const { getPosts } = useContext(funcContext)
 
   const searchUser = () => {
     setOpenModel(true)
@@ -71,7 +71,7 @@ export default function Header() {
       })
   }
   let navigationLinks = [
-    { name: "All Posts", href: "/", func: () => {refresh()} },
+    { name: "All Posts", href: "/", func: () => {getPosts()} },
     { name: "Search For a User", href: "#", func: () => {searchUser()} },
   ];
   if (myInfoState.isLoggedIn) {

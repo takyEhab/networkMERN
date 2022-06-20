@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { funcContext } from "./funcContext";
 import Posts from "./Posts";
-import { error, setData } from "./store/actions";
+import { error, removePosts, setData } from "./store/actions";
 
 export default function User({ match }) {
   const { follow } = useContext(funcContext);
@@ -26,6 +26,7 @@ export default function User({ match }) {
   const [user, setUser] = useState("loading");
   const [isFollowed, setFollowed] = useState(false);
   const [isSame, setIsSame] = useState(false);
+  const posts = useSelector((state) => state.postsState.posts);
 
   useEffect(() => {
     api
@@ -34,7 +35,10 @@ export default function User({ match }) {
         setUser(res.data.user);
         dispatch(setData(res.data.userPosts));
       })
-      .catch((err) => dispatch(error(err.response.data ? err.response.data : null)));
+      .catch((err) =>
+        dispatch(error(err.response.data ? err.response.data : null))
+      );
+    return () => dispatch(removePosts());
   }, [match.params.name]);
 
   useEffect(() => {
@@ -71,7 +75,6 @@ export default function User({ match }) {
 
       <br />
       <Posts />
-
     </Fragment>
   );
 }

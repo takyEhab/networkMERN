@@ -32,7 +32,6 @@ export default function Posts() {
         }).slice(first, last).map((item, i) => 
           <Card
             key={i} post={item}
-            // from={'main'}
           />
         )}
 

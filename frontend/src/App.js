@@ -14,7 +14,7 @@ import "./App.css";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { logIn, error, logOut, setData } from "./components/store/actions";
+import { logIn, error, logOut, setData, removePosts } from "./components/store/actions";
 import { useSnackbar } from "notistack";
 
 const Register = lazy(() => import("./components/SignUp"));
@@ -31,14 +31,7 @@ export default function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    api
-      .get("posts/get-all")
-      .then((posts) => {
-        dispatch(setData(posts.data));
-      })
-      .catch((err) => {
-        dispatch(error(err.response.data ? err.response.data : null));
-      });
+    getPosts();
     api
       .get("user/profile/", CONFIG)
       .then((info) => {
@@ -47,11 +40,20 @@ export default function App() {
       .catch(() => {
         dispatch(logOut());
       });
-    // remove posts from state
+      return () => dispatch(removePosts())
 
-    // return (
-    // )
   }, []);
+
+  const getPosts = useCallback(() => {
+    api
+      .get("posts/get-all")
+      .then((posts) => {
+        dispatch(setData(posts.data));
+      })
+      .catch((err) => {
+        dispatch(error(err.response.data ? err.response.data : null));
+      });
+  }, [posts]);
 
   const follow = async (user_id) => {
     try {
@@ -69,9 +71,10 @@ export default function App() {
         enqueueSnackbar(`${err.message}!`, { variant: "error" });
       }
     }
+
   };
 
-  const ProviderValue = { follow };
+  const ProviderValue = { getPosts, follow };
 
   return (
     <Router>

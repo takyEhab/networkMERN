@@ -20,4 +20,8 @@ const error = (message) => {
 	return { type: ActionTypes.ERROR, payload:message }
 }
 
-export {logIn, logOut, setData, error}
+const removePosts = () => {
+	return { type: ActionTypes.Remove_POSTS }
+}
+
+export {logIn, logOut, setData, error, removePosts}

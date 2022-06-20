@@ -11,7 +11,7 @@ import Pagination from "@mui/material/Pagination";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useDispatch, useSelector } from "react-redux";
 import Posts from "./Posts";
-import { error, setData } from "./store/actions";
+import { error, removePosts, setData } from "./store/actions";
 
 // function Following() {
 //   const isLoggedIn = useSelector(state => state.myInfoState.isLoggedIn)
@@ -77,6 +77,7 @@ import { error, setData } from "./store/actions";
 function Following() {
   const dispatch = useDispatch();
   const CONFIG = useSelector((state) => state.myInfoState.CONFIG);
+  const posts = useSelector((state) => state.postsState.posts);
 
   useEffect(() => {
     api
@@ -85,9 +86,10 @@ function Following() {
         dispatch(setData(res.data));
       })
       .catch((err) => {
-        console.log(err)
-        dispatch(error(err.response.data ? err.response.data : null ))
+        console.log(err);
+        dispatch(error(err.response.data ? err.response.data : null));
       });
+    return () => dispatch(removePosts());
   }, []);
   return <Posts />;
 }

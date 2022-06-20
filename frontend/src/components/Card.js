@@ -113,24 +113,7 @@ export default function PostsCard(props) {
     )
       ? setLike(true)
       : setLike(false);
-    // console.log(
-    //   props.post.UsersLikes.includes(
-    //     myInfoState.isLoggedIn && myInfoState.myInfo.username
-    //   )
-    // );
   }, [myInfoState.isLoggedIn, props.post]);
-  // }, [myInfoState, posts]);
-
-  // const refreshSelected = (newPosts) => {
-  //   if (props.from === "main") {
-  //     // refresh()
-  //     dispatch(setData(newPosts));
-  //   } else if (props.from === "following") {
-  //     props.getFollowingPosts();
-  //   } else {
-  //     props.GetUserPosts();
-  //   }
-  // };
   const like = (id) => {
     api
       .patch(`posts/like/${id}/`, {}, myInfoState.CONFIG)
@@ -170,7 +153,7 @@ export default function PostsCard(props) {
           }
           return obj;
         });
-        dispatch(setData(newPostsArr))
+        dispatch(setData(newPostsArr));
         enqueueSnackbar("Post Edited!", { variant: "info" });
         setIsEdit(false);
       })
@@ -190,7 +173,7 @@ export default function PostsCard(props) {
         const newPostsArr = posts.filter(
           (obj) => obj._id !== res.data.post._id
         );
-        dispatch(setData(newPostsArr))
+        dispatch(setData(newPostsArr));
 
         enqueueSnackbar("Post Deleted!", { variant: "info" });
       })
