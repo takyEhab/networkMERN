@@ -17,7 +17,7 @@ const verifyToken = async (req, res, next) => {
 
     req.myInfo = me;
   } catch (err) {
-    return res.status(401).send("Invalid Token");
+    return res.status(401).send("You are not logged in");
   }
   return next();
 };

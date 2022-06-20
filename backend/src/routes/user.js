@@ -1,19 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const Post = require("../models/post");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const verifyToken = require("../middleware/auth");
 
-router.get("/profile", verifyToken, async (req, res) => {
-  res.status(200).json(req.myInfo);
-});
-router.post("/logout", verifyToken, async (req, res) => {
-  // res.status(200).json(req.myInfo)
-  delete req.myInfo;
-  res.status(201).json({ message: "Logged out" });
-});
 // logging
 router.post("/login", async (req, res) => {
   // Our login logic starts here
@@ -36,7 +27,7 @@ router.post("/login", async (req, res) => {
         { expiresIn: "3d" }
       );
       // user
-      res.status(200).json({ user, token });
+      return res.status(200).json({ user, token });
     }
     res.status(400).send("Invalid Credentials");
   } catch (err) {
@@ -76,9 +67,75 @@ router.post("/register", async (req, res) => {
     // return new user
     res.status(201).json({ user, token });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json(err.message);
   }
 });
 
+// logout
+router.post("/logout", verifyToken, async (req, res) => {
+  // res.status(200).json(req.myInfo)
+  delete req.myInfo;
+  res.status(201).json({ message: "Logged out" });
+});
+
+// data of the logged in user
+router.get("/profile", verifyToken, async (req, res) => {
+  res.status(200).json(req.myInfo);
+});
+
+// search user
+router.get("/users/:username", async (req, res) => {
+  // TODO as Django
+  const re = new RegExp(`${req.params.username}`, "i");
+
+  const users = await User.find(
+    { username: re },
+    "username followers following"
+  ).exec();
+
+  res.send(users);
+});
+
+// follow user
+router.patch("/follow/:id", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    // see if the user exists
+    if (!user) return res.sendStatus(404);
+    // see if he is already followed by me or not
+    const followObject = user.followers.find(
+      (follow) => follow.user === req.myInfo.username
+    );
+
+    // if yes un follow, and remove my name from his followers list and his name from my following list
+    //  and send you unfollowed ' his username' succsefly
+    // if no yo do the opposite
+
+    if (followObject) {
+      await User.updateOne(
+        { _id: req.myInfo._id },
+        { $pull: { following: { user: user.username } } }
+      );
+      const index = user.followers.findIndex(
+        (element) => element.user === req.myInfo.username
+      );
+      user.followers.splice(index, 1);
+      await user.save();
+
+      return res.json({ user: user.username, operation: "Unfollow" });
+    } else {
+      await User.updateOne(
+        { _id: req.myInfo._id },
+        { $push: { following: { user: user.username } } }
+      );
+      user.followers.push({ user: req.myInfo.username });
+      await user.save();
+
+      return res.json({ user: user.username, operation: "follow" });
+    }
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
 
 module.exports = router;

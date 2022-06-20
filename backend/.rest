@@ -8,17 +8,17 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8000/login
+POST http://localhost:8000/user/login
 content-type: application/json
 
 {
-  "username": "taky",
+  "username": "saif",
   "password": "123"
 }
 
 ###
-GET http://localhost:8000/profile
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI5YmI1MmM1ZGFmZTE5ZTRlOTc1ZWMxIiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU0MzcxNjI4LCJleHAiOjE2NTQ2MzA4Mjh9.7IaZ3StRNQEsnI8uYo6d8Bv9FJ6P9lf6OEVrzzXh_LM
+GET http://localhost:8000/user/profile
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhOGNmNGE5MTdhOTA2YTFhNTk2MjRjIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1MjMwMjgyLCJleHAiOjE2NTU0ODk0ODJ9.5J8Sq3ePM6kdJ_24eKHJxQZap9Q6Ru6ahvB5shUmVZQ
 
 ###
 GET http://localhost:8000/logout
@@ -32,14 +32,33 @@ GET http://localhost:8000/posts/get-all HTTP/1.1
 ### 
 
 POST http://localhost:8000/posts/add
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhODZmMTg1ZmMxODg3ZDNiMmEzMGU0IiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU1MjA4NzM1LCJleHAiOjE2NTU0Njc5MzV9.-h3aHqYIOuL145-iYhpSJf9oOw-Wuitz1xva4zj37tU
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhOGNmNGE5MTdhOTA2YTFhNTk2MjRjIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1MjMwMjgyLCJleHAiOjE2NTU0ODk0ODJ9.5J8Sq3ePM6kdJ_24eKHJxQZap9Q6Ru6ahvB5shUmVZQ
 content-type: application/json
 
 {
-  "post": "taky"
+  "post": "FASSAFFSA"
 }
 
 ###
+DELETE http://localhost:8000/posts/62a8cfbebb2c3f827b374bb5
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhOGNmNGE5MTdhOTA2YTFhNTk2MjRjIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1MjMwMjgyLCJleHAiOjE2NTU0ODk0ODJ9.5J8Sq3ePM6kdJ_24eKHJxQZap9Q6Ru6ahvB5shUmVZQ
 
 
+###
+PATCH http://localhost:8000/posts/62a9778e8f1c55fd08b88965
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhOGNmNGE5MTdhOTA2YTFhNTk2MjRjIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1MjMwMjgyLCJleHAiOjE2NTU0ODk0ODJ9.5J8Sq3ePM6kdJ_24eKHJxQZap9Q6Ru6ahvB5shUmVZQ
+content-type: application/json
 
+{
+  "post": "dasdda"
+}
+
+###
+PATCH http://localhost:8000/posts/like/62a9778e8f1c55fd08b88965
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhOGNmNGE5MTdhOTA2YTFhNTk2MjRjIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1MjMwMjgyLCJleHAiOjE2NTU0ODk0ODJ9.5J8Sq3ePM6kdJ_24eKHJxQZap9Q6Ru6ahvB5shUmVZQ
+content-type: application/json
+
+###
+PATCH http://localhost:8000/user/follow/62b00cd47d292848ac367240
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhZjYzMjQxY2I3MDg3ZTc4YjRhYzkzIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1NzA0ODA4LCJleHAiOjE2NTU5NjQwMDh9.wyAJJUx5V-o3z4phBbcksSUvBtRl28CBbDdb97dSCuU
+# taky: 62af63171cb7087e78b4ac8d

@@ -21,10 +21,11 @@ export default function Search(props) {
   const history = useHistory()
 
   const search = (name) => {
-    api.get(`users/${name}/`)
-    .then(users => {
+    api.get(`user/users/${name}/`)
+      .then(users => {
+      // console.log(users.data)
         setData(users.data)
-    })
+      })
   }
   const redirect = (username) => {
     history.push(`/profile/${username}`)
@@ -40,9 +41,13 @@ export default function Search(props) {
 	const follow = (e, user) => {
     const isF = e.target.textContent
 		e.stopPropagation()
-		api.patch(`follow/${user.id}/`, {}, myInfoState.CONFIG).then(()=>{
-      enqueueSnackbar(isF === 'follow' ? `You FOLLOWED ${user.username}!`:`You UNFOLLOWED ${user.username}!`, { variant: 'info' });
-      e.target.textContent = isF === 'follow' ? 'unfollow':'follow'
+    api.patch(`user/follow/${user._id}/`, {}, myInfoState.CONFIG).then((info) => {
+      console.log(info.data)
+
+      // enqueueSnackbar(isF === 'follow' ? `You FOLLOWED ${user.username}!`:`You UNFOLLOWED ${user.username}!`, { variant: 'info' });
+      // e.target.textContent = isF === 'follow' ? 'unfollow':'follow'
+    }).catch(err => {
+      console.log(err)
     })
 	}
   
@@ -67,12 +72,12 @@ export default function Search(props) {
             {data && 
             data.map((user) => {
                 return (
-                  <TableRow onClick={() => redirect(user.username)} hover role="checkbox" tabIndex={-1} key={user.id}>
+                  <TableRow onClick={() => redirect(user.username)} hover role="checkbox" tabIndex={-1} key={user._id}>
                     <TableCell >
                         {user.username}
                     </TableCell>
 										
-										{(myInfoState.myInfo && myInfoState.myInfo.id !== user.id) &&
+										{(myInfoState.myInfo && myInfoState.myInfo._id !== user._id) &&
 
 											<TableCell align='right'>
                         <Button onClick={(e) => follow(e, user)} color="secondary" variant="outlined" > 

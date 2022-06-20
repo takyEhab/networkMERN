@@ -29,7 +29,7 @@ export default function SignIn() {
     message: "",
     close: false,
     isError: false,
-  });``
+  });
 
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();

@@ -74,7 +74,7 @@ export default function BasicModal() {
           vertical: 'bottom',
           horizontal: 'left',
         }}>
-        <Typography sx={{ p: 2 }}>You have to be loged in to write a post.</Typography>
+        <Typography sx={{ p: 2 }}>You have to be logged in to write a post.</Typography>
       </Popover>
 
 
