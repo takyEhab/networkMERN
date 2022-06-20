@@ -16,8 +16,8 @@ const setData = (data) => {
 	return { type: ActionTypes.ADD_POSTS, payload: data }
 }
 
-const error = () => {
-	return { type: ActionTypes.ERROR }
+const error = (message) => {
+	return { type: ActionTypes.ERROR, payload:message }
 }
 
 export {logIn, logOut, setData, error}

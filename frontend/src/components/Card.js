@@ -91,11 +91,8 @@ const generateColor = (str) => {
   return color;
 };
 
-export default function RecipeReviewCard(props) {
-  const { refresh } = useContext(funcContext);
-
+export default function PostsCard(props) {
   const dispatch = useDispatch();
-
   const posts = useSelector((state) => state.postsState.posts);
   const myInfoState = useSelector((state) => state.myInfoState);
   const [isLike, setLike] = useState(null);
@@ -112,28 +109,28 @@ export default function RecipeReviewCard(props) {
 
   useEffect(() => {
     props.post.UsersLikes.includes(
-      myInfoState.isLogedIn && myInfoState.myInfo.username
+      myInfoState.isLoggedIn && myInfoState.myInfo.username
     )
       ? setLike(true)
       : setLike(false);
     // console.log(
     //   props.post.UsersLikes.includes(
-    //     myInfoState.isLogedIn && myInfoState.myInfo.username
+    //     myInfoState.isLoggedIn && myInfoState.myInfo.username
     //   )
     // );
-  }, [myInfoState.isLogedIn, props.post]);
+  }, [myInfoState.isLoggedIn, props.post]);
   // }, [myInfoState, posts]);
 
-  const refreshSelected = (newPosts) => {
-    if (props.from === "main") {
-      // refresh()
-      dispatch(setData(newPosts));
-    } else if (props.from === "following") {
-      props.getFollowingPosts();
-    } else {
-      props.GetUserPosts();
-    }
-  };
+  // const refreshSelected = (newPosts) => {
+  //   if (props.from === "main") {
+  //     // refresh()
+  //     dispatch(setData(newPosts));
+  //   } else if (props.from === "following") {
+  //     props.getFollowingPosts();
+  //   } else {
+  //     props.GetUserPosts();
+  //   }
+  // };
   const like = (id) => {
     api
       .patch(`posts/like/${id}/`, {}, myInfoState.CONFIG)
@@ -149,7 +146,7 @@ export default function RecipeReviewCard(props) {
           }
           return obj;
         });
-        refreshSelected(newPostsArr);
+        dispatch(setData(newPostsArr));
       })
       .catch((err) => {
         err.response.status === 403
@@ -173,7 +170,7 @@ export default function RecipeReviewCard(props) {
           }
           return obj;
         });
-        refreshSelected(newPostsArr);
+        dispatch(setData(newPostsArr))
         enqueueSnackbar("Post Edited!", { variant: "info" });
         setIsEdit(false);
       })
@@ -193,7 +190,8 @@ export default function RecipeReviewCard(props) {
         const newPostsArr = posts.filter(
           (obj) => obj._id !== res.data.post._id
         );
-        refreshSelected(newPostsArr);
+        dispatch(setData(newPostsArr))
+
         enqueueSnackbar("Post Deleted!", { variant: "info" });
       })
       .catch(() => {
@@ -240,7 +238,7 @@ export default function RecipeReviewCard(props) {
             </Link>
           }
           action={
-            myInfoState.isLogedIn &&
+            myInfoState.isLoggedIn &&
             (myInfoState.myInfo.username === props.post.writer ? (
               isEdit ? (
                 <IconButton onClick={() => setIsEdit(false)}>

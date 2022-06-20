@@ -74,7 +74,7 @@ export default function Header() {
     { name: "All Posts", href: "/", func: () => {refresh()} },
     { name: "Search For a User", href: "#", func: () => {searchUser()} },
   ];
-  if (myInfoState.isLogedIn) {
+  if (myInfoState.isLoggedIn) {
     navigationLinks.push(    
       { name: "Following", href: "/following" },
       { name: myInfoState.myInfo.username, href: `/profile/${myInfoState.myInfo.username}` },

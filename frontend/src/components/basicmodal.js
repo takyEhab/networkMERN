@@ -27,12 +27,12 @@ export default function BasicModal() {
 
   const handleCloseModel = () => setOpenModel(false);
 
-  const isLogedIn = useSelector(state => state.myInfoState.isLogedIn)
+  const isLoggedIn = useSelector(state => state.myInfoState.isLoggedIn)
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
-    if (isLogedIn) {
+    if (isLoggedIn) {
       setOpenModel(true)
     } else {
       setAnchorEl(event.currentTarget);

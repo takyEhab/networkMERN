@@ -1,142 +1,77 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
-import Button from '@mui/material/Button';
-import { api } from './axios'
-import Card from './Card'
-import Pagination from '@mui/material/Pagination';
-import LinearProgress from '@mui/material/LinearProgress';
-import CircularProgress from '@mui/material/CircularProgress'
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import { useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+  Fragment,
+} from "react";
+import Button from "@mui/material/Button";
+import { api } from "./axios";
+import Card from "./Card";
+import Pagination from "@mui/material/Pagination";
+import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
+import { useDispatch, useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
+import { funcContext } from "./funcContext";
+import Posts from "./Posts";
+import { error, setData } from "./store/actions";
 
 export default function User({ match }) {
-  const myInfoState = useSelector(state => state.myInfoState)
-  const { enqueueSnackbar } = useSnackbar();
-
-  const [user, setUser] = useState('loading')
-  const [userPosts, setUserPosts] = useState('loading')
-  const [isFollowed, setFollowed] = useState(false)
-  const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isSame, setIsSame] = useState(false)
-
+  const { follow } = useContext(funcContext);
+  const dispatch = useDispatch();
+  const myInfoState = useSelector((state) => state.myInfoState);
+  const [user, setUser] = useState("loading");
+  const [isFollowed, setFollowed] = useState(false);
+  const [isSame, setIsSame] = useState(false);
 
   useEffect(() => {
-    GetUser()
-    GetUserPosts()
-
-  }, [match.params.name])
+    api
+      .get(`/posts/user/${match.params.name}/`)
+      .then((res) => {
+        setUser(res.data.user);
+        dispatch(setData(res.data.userPosts));
+      })
+      .catch((err) => dispatch(error(err.response.data ? err.response.data : null)));
+  }, [match.params.name]);
 
   useEffect(() => {
-    if (myInfoState.isLogedIn) {
-      if (myInfoState.myInfo.username === match.params.name) setIsSame(true)
-      myInfoState.myInfo.following.forEach(item => {
-        if (item.following_user_id === match.params.name) setFollowed(true);
+    if (myInfoState.isLoggedIn) {
+      if (myInfoState.myInfo.username === match.params.name) setIsSame(true);
+      myInfoState.myInfo.following.forEach((item) => {
+        if (item.user === match.params.name) setFollowed(true);
       });
     }
-  }, [myInfoState.myInfo, match.params.name])
+  }, [myInfoState.myInfo, match.params.name]);
 
-  const GetUser = () => {
-    api.get(`user/${match.params.name}/`)
-      .then(res => {
-        setUser(res.data);
-      })
-  }
-
-  const GetUserPosts = useCallback(async () => {
-    let res = await api.get(`posts/`).then(res => res.data)
-
-    const posts = res.filter(function (post) {
-      return (
-        post.writer === match.params.name
-      )
-    });
-    setUserPosts(posts)
-  }, [match.params.name])
-
-
-  const handleChange = (event, value) => {
-    setPage(value);
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const handleClick = async (user_id) => {
+    const data = await follow(user_id);
+    setUser(data.user);
+    setFollowed(!isFollowed);
   };
-  const follow = (user) => {
-    api.patch(`follow/${user.id}/`, {}, myInfoState.CONFIG)
-      .then(() => {
-        enqueueSnackbar(isFollowed ? `You UNFOLLOWED ${user.username}!` : `You FOLLOWED ${user.username}!`, { variant: 'info' });
-        // enqueueSnackbar(isF === 'follow' ? `, { variant: 'info' });
-
-        GetUser();
-      })
-
-  }
-
-  const postPerPage = 10
-  const last = page * postPerPage
-  const first = last - postPerPage
-
-  const pageCount = Math.ceil(((userPosts !== null && userPosts !== 'loading') && userPosts.length) / postPerPage)
-
-  const handleClick = (event) => {
-    if (myInfoState.isLogedIn) {
-      if (user && user !== 'loading') {
-        follow(user)
-        setFollowed(!isFollowed)
-      } else return undefined
-    } else {
-      setAnchorEl(event.currentTarget);
-    }
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-
 
   return (
-    <div>
-
-      {user !== 'loading' ?
+    <Fragment>
+      {user !== "loading" ? (
         <>
           <h1>{user && user.username}</h1>
           <h1>followers :{user && user.followers.length}</h1>
           <h1>following :{user && user.following.length}</h1>
-        </> :
-        <CircularProgress />}
-      {!isSame &&
-        <Button aria-describedby={id} onClick={handleClick} variant="contained">
-          {isFollowed ? 'Unfollow' : 'Follow'}
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+      {!isSame && (
+        <Button onClick={() => handleClick(user._id)} variant="contained">
+          {isFollowed ? "Unfollow" : "Follow"}
         </Button>
-      }
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Typography sx={{ p: 2 }}>You have to be Loged in to follow someone.</Typography>
-      </Popover>
-      <br />
-      {(userPosts !== null && userPosts !== 'loading') &&
-        userPosts.sort((a, b) => {
-          return new Date(a.id) - new Date(b.id);
-        }).slice(first, last).map((item, i) => <Card
-          key={i} post={item}
-          from={'user'}
-          GetUserPosts={GetUserPosts}
-        />)}
+      )}
 
-      {(userPosts === 'loading') ?
-        <LinearProgress sx={{ marginTop: '10%' }} /> :
-        <Pagination size='large' count={pageCount} page={page} onChange={handleChange} />}
-    </div>
-  )
+      <br />
+      <Posts />
+
+    </Fragment>
+  );
 }

@@ -99,7 +99,9 @@ router.get("/users/:username", async (req, res) => {
 // follow user
 router.patch("/follow/:id", verifyToken, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select(
+      "username followers following"
+    );;
     // see if the user exists
     if (!user) return res.sendStatus(404);
     // see if he is already followed by me or not
@@ -122,7 +124,7 @@ router.patch("/follow/:id", verifyToken, async (req, res) => {
       user.followers.splice(index, 1);
       await user.save();
 
-      return res.json({ user: user.username, operation: "Unfollow" });
+      return res.json({ user, operation: "Unfollow" });
     } else {
       await User.updateOne(
         { _id: req.myInfo._id },
@@ -131,7 +133,7 @@ router.patch("/follow/:id", verifyToken, async (req, res) => {
       user.followers.push({ user: req.myInfo.username });
       await user.save();
 
-      return res.json({ user: user.username, operation: "follow" });
+      return res.json({ user, operation: "follow" });
     }
   } catch (err) {
     res.status(500).json(err.message);

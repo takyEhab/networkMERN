@@ -62,3 +62,6 @@ content-type: application/json
 PATCH http://localhost:8000/user/follow/62b00cd47d292848ac367240
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhZjYzMjQxY2I3MDg3ZTc4YjRhYzkzIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU1NzA0ODA4LCJleHAiOjE2NTU5NjQwMDh9.wyAJJUx5V-o3z4phBbcksSUvBtRl28CBbDdb97dSCuU
 # taky: 62af63171cb7087e78b4ac8d
+
+###
+GET http://localhost:8000/posts/user/saif

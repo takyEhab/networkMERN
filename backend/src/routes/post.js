@@ -2,6 +2,7 @@ const express = require("express");
 const verifyToken = require("../middleware/auth");
 const router = express.Router();
 const Post = require("../models/post");
+const User = require("../models/user");
 
 // get all posts
 router.get("/get-all", async (req, res) => {
@@ -92,4 +93,36 @@ router.patch("/like/:id", verifyToken, async (req, res) => {
   }
 });
 
+// get user profile and posts by name
+router.get("/user/:username", async (req, res) => {
+  try {
+    const user = await User.findOne(
+      { username: req.params.username },
+      "username followers following"
+    ).exec();
+    if (!user) return res.sendStatus(404);
+    const userPosts = await Post.find({ writer: req.params.username }).exec();
+
+    res.json({ user, userPosts });
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
+// get my followings posts
+router.get("/following", verifyToken, async (req, res) => {
+  //     let res = await api.get(`posts/`).then(res => res.data)
+  // get list
+  const names = req.myInfo.following.map(function (obj) {
+    return obj.user;
+  });
+  
+  const posts = await Post.find({ writer: { $in: names } }).exec();
+  res.json(posts);
+  //     const posts = res.filter(function (post) {
+  //       return (
+  //         following.includes(post.writer)
+  //       )
+  //     })
+});
 module.exports = router;

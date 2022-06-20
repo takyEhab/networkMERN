@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { api } from "./axios";
 import Button from "@mui/material/Button";
@@ -12,8 +12,11 @@ import { useHistory } from "react-router-dom";
 import Zoom from "@mui/material/Zoom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { funcContext } from "./funcContext";
 
 export default function Search(props) {
+  const { follow } = useContext(funcContext);
+
   const [data, setData] = useState(null);
   const myInfoState = useSelector((state) => state.myInfoState);
   const { enqueueSnackbar } = useSnackbar();
@@ -21,7 +24,6 @@ export default function Search(props) {
 
   const search = (name) => {
     api.get(`user/users/${name}/`).then((users) => {
-      // console.log(users.data)
       setData(users.data);
     });
   };
@@ -36,21 +38,12 @@ export default function Search(props) {
       search(e.target.value);
     }
   };
-  const follow = (e, user) => {
-    const isF = e.target.textContent;
-    e.target.textContent = isF === "follow" ? "unfollow" : "follow";
+  const handleClick = async (e,user_id) => {
     e.stopPropagation();
-    api
-      .patch(`user/follow/${user._id}/`, {}, myInfoState.CONFIG)
-      .then((info) => {
-        enqueueSnackbar(`You ${info.data.operation} ${info.data.user}!`, {
-          variant: "info",
-        });
-      })
-      .catch((err) => {
-        enqueueSnackbar(`${err.message}!`, { variant: "error" });
-      });
-  };
+    const res = await follow(user_id)
+    e.target.textContent = res.operation === "follow" ? "unfollow" : "follow";
+  }
+  
 
   return (
     <div>
@@ -83,7 +76,7 @@ export default function Search(props) {
                           myInfoState.myInfo._id !== user._id && (
                             <TableCell align="right">
                               <Button
-                                onClick={(e) => follow(e, user)}
+                                onClick={(e)=>handleClick(e,user._id)}
                                 color="secondary"
                                 variant="outlined"
                               >
