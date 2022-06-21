@@ -27,8 +27,9 @@ app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.json())
 
-
-// mongo db
+// const mongo_url = "mongodb://mongo:27017/bank" 
+// // mongo db
+// const cloud_mongo_db = process.env.DATABASE_URI_CLOUD
 mongoose.connect(process.env.DATABASE_URI_CLOUD)
 
 const db = mongoose.connection
