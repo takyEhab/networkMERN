@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
-import { api } from "./axios";
+import api from "../axios";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -11,15 +11,13 @@ import TableRow from "@mui/material/TableRow";
 import { useHistory } from "react-router-dom";
 import Zoom from "@mui/material/Zoom";
 import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { funcContext } from "./funcContext";
+import { funcContext } from "../context";
 
 export default function Search(props) {
   const { follow } = useContext(funcContext);
 
   const [data, setData] = useState(null);
   const myInfoState = useSelector((state) => state.myInfoState);
-  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
 
   const search = (name) => {
@@ -38,12 +36,11 @@ export default function Search(props) {
       search(e.target.value);
     }
   };
-  const handleClick = async (e,user_id) => {
+  const handleClick = async (e, user_id) => {
     e.stopPropagation();
-    const res = await follow(user_id)
+    const res = await follow(user_id);
     e.target.textContent = res.operation === "follow" ? "unfollow" : "follow";
-  }
-  
+  };
 
   return (
     <div>
@@ -76,12 +73,13 @@ export default function Search(props) {
                           myInfoState.myInfo._id !== user._id && (
                             <TableCell align="right">
                               <Button
-                                onClick={(e)=>handleClick(e,user._id)}
+                                onClick={(e) => handleClick(e, user._id)}
                                 color="secondary"
                                 variant="outlined"
                               >
                                 {myInfoState.myInfo.following.filter(
-                                  (following) => following.user === user.username
+                                  (following) =>
+                                    following.user === user.username
                                 ).length > 0
                                   ? "Unfollow"
                                   : "Follow"}

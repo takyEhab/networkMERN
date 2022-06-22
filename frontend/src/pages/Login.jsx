@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -14,18 +12,20 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
-import { api } from "./axios";
+
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
-import { logIn } from "./store/actions";
+
+import { logIn } from "../store/actions";
+import api from "../axios";
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
   const dispatch = useDispatch();
 
-  const [error, setError] = React.useState({
+  const [error, setError] = useState({
     message: "",
     close: false,
     isError: false,
@@ -37,7 +37,7 @@ export default function SignIn() {
   const login = async (username, password) => {
     try {
       let res = await api.post("user/login/", { username, password });
-      const config = { headers: { 'x-access-token': res.data.token } };
+      const config = { headers: { "x-access-token": res.data.token } };
       localStorage.setItem("CONFIG", JSON.stringify(config));
       dispatch(logIn(res.data.user, config));
       enqueueSnackbar("you are loged in successfully!", { variant: "success" });
@@ -57,7 +57,6 @@ export default function SignIn() {
     setError({ isError: false, message: "", close: true });
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
     login(data.get("username"), data.get("password"));
   };
 

@@ -1,32 +1,19 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-  Fragment,
-} from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
 import Button from "@mui/material/Button";
-import { api } from "./axios";
-import Card from "./Card";
-import Pagination from "@mui/material/Pagination";
-import LinearProgress from "@mui/material/LinearProgress";
+import api from "../axios";
 import CircularProgress from "@mui/material/CircularProgress";
-import Popover from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { funcContext } from "./funcContext";
-import Posts from "./Posts";
-import { error, removePosts, setData } from "./store/actions";
+import { funcContext } from "../context";
+import Posts from "../components/Posts";
+import { error, removePosts, setData } from "../store/actions";
 
-export default function User({ match }) {
+export default function Profile({ match }) {
   const { follow } = useContext(funcContext);
   const dispatch = useDispatch();
   const myInfoState = useSelector((state) => state.myInfoState);
   const [user, setUser] = useState("loading");
   const [isFollowed, setFollowed] = useState(false);
   const [isSame, setIsSame] = useState(false);
-  const posts = useSelector((state) => state.postsState.posts);
 
   useEffect(() => {
     api

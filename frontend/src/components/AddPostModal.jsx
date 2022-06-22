@@ -1,15 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
-import { funcContext } from "./funcContext";
 import { useSnackbar } from "notistack";
-import { api } from "./axios";
+import api from "../axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "./store/actions";
+import { setData } from "../store/actions";
 
-export default function NewPost(props) {
+export default function NewPostModal(props) {
   const dispatch = useDispatch();
 
   const [post, setPost] = useState("");
@@ -20,7 +19,6 @@ export default function NewPost(props) {
     close: false,
   });
 
-  const { refresh } = useContext(funcContext);
   const CONFIG = useSelector((state) => state.myInfoState.CONFIG);
   const posts = useSelector((state) => state.postsState.posts);
 

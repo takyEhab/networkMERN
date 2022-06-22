@@ -4,7 +4,7 @@ import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { createStore } from 'redux';
 import {Provider} from 'react-redux';
-import reducers from "./components/store/reducer";
+import reducers from "./store/reducer";
 
 let store = createStore(
   reducers,

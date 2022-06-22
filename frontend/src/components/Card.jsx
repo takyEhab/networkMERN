@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -7,12 +7,11 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { funcContext } from "./funcContext";
 
 import { Link } from "react-router-dom";
-import { api } from "./axios";
+import api from "../axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "./store/actions";
+import { setData } from "../store/actions";
 import { useSnackbar } from "notistack";
 
 import TextField from "@mui/material/TextField";

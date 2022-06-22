@@ -1,28 +1,18 @@
-import React, {
-  lazy,
-  useState,
-  useEffect,
-  useReducer,
-  useMemo,
-  useCallback,
-  Suspense,
-} from "react";
+import React, { lazy, useEffect, useCallback, Suspense } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { funcContext } from "./components/funcContext";
-import { api } from "./components/axios";
-import "./App.css";
+import { funcContext } from "./context";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { logIn, error, logOut, setData, removePosts } from "./components/store/actions";
+import { logIn, error, logOut, setData, removePosts } from "./store/actions";
 import { useSnackbar } from "notistack";
+import api from "./axios";
 
-const Register = lazy(() => import("./components/SignUp"));
-const Login = lazy(() => import("./components/SignIn"));
-const Following = lazy(() => import("./components/following"));
-const SpringModal = lazy(() => import("./components/basicmodal"));
-const User = lazy(() => import("./components/User"));
-const Posts = lazy(() => import("./components/Posts"));
+const Register = lazy(() => import("./pages/Register"));
+const Login = lazy(() => import("./pages/Login"));
+const Following = lazy(() => import("./pages/following"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Home = lazy(() => import("./pages/Home"));
 
 export default function App() {
   const dispatch = useDispatch();
@@ -40,8 +30,7 @@ export default function App() {
       .catch(() => {
         dispatch(logOut());
       });
-      return () => dispatch(removePosts())
-
+    return () => dispatch(removePosts());
   }, []);
 
   const getPosts = useCallback(() => {
@@ -71,7 +60,6 @@ export default function App() {
         enqueueSnackbar(`${err.message}!`, { variant: "error" });
       }
     }
-
   };
 
   const ProviderValue = { getPosts, follow };
@@ -84,17 +72,13 @@ export default function App() {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path="/">
-              <SpringModal />
-
-              <Posts />
+              <Home />
             </Route>
-
-            <Route exact path="/profile/:name" component={User} />
+            <Route exact path="/profile/:name" component={Profile} />
             <Route exact path="/following" component={Following} />
             <Route exact path="/register">
               <Register />
             </Route>
-
             <Route exact path="/login">
               <Login />
             </Route>

@@ -14,26 +14,29 @@ services:
     container_name: node-docker  
     ports:
       - "8000:8000"
+    environment:
+      PORT: 8000
+      DATABASE_URI_LOCAL: mongodb://mongo_db:27017/db
     # volumes:
     #   - ./backend:/app
     #   - ./app/node_modules
 
-  #   depends_on:
-  #     - mongo
+    depends_on:
+      - mongo_db
 
-  # mongo:
-  #   image: mongo:3.6.19-xenial
+  mongo_db:
+    image: mongo:latest
+    restart: always
   #   ports:
   #     - "27017:27017"
   #   networks:
   #     - mern-app
-  #   volumes:
-  #     - mongo-data:/data/db
+    volumes:
+      - mongo_db:/data/db
 
   # networks:
   #   mern-app:
   #     driver: bridge
 
-  # volumes:
-  #   mongo-data:
-  #     driver: local
+volumes:
+  mongo_db: {}

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from "@mui/material/Skeleton";
 import AppBar from "@mui/material/AppBar";
 import ToolBar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
@@ -12,19 +12,18 @@ import Divider from "@mui/material/Divider";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import List from "@mui/material/List";
 import Button from "@mui/material/Button";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
-import { api } from './axios'
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import api from "../axios";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 import ListItem from "@mui/material/ListItem";
-import { useSelector, useDispatch } from 'react-redux';
-import {logOut } from './store/actions'
-import Search from './SearchBar'
-import { funcContext } from './funcContext'
-
+import { useSelector, useDispatch } from "react-redux";
+import { logOut } from "../store/actions";
+import Search from "./SearchBar";
+import { funcContext } from "../context";
 
 const avatarStyle = {
   marginRight: "auto",
@@ -35,63 +34,81 @@ const avatarStyle = {
   width: 100,
   border: "2px solid gray",
   borderLeft: "12px solid transparent",
-  borderRight: "12px solid transparent"
-}
+  borderRight: "12px solid transparent",
+};
 
 const linkStyle = {
-  marginLeft: 20
-}
+  marginLeft: 20,
+};
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 export default function Header() {
-  const myInfoState = useSelector(state => state.myInfoState)
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
-  const { getPosts } = useContext(funcContext)
+  const myInfoState = useSelector((state) => state.myInfoState);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const { getPosts } = useContext(funcContext);
 
   const searchUser = () => {
-    setOpenModel(true)
-  }
+    setOpenModel(true);
+  };
   const logout = () => {
-    api.post(`user/logout/`, {}, myInfoState.CONFIG)
-      .then(() => {
-        dispatch(logOut())
-        enqueueSnackbar('Logged out!', { variant: 'info' })
-
-      })
-  }
+    api.post(`user/logout/`, {}, myInfoState.CONFIG).then(() => {
+      dispatch(logOut());
+      enqueueSnackbar("Logged out!", { variant: "info" });
+    });
+  };
   let navigationLinks = [
-    { name: "All Posts", href: "/", func: () => {getPosts()} },
-    { name: "Search For a User", href: "#", func: () => {searchUser()} },
+    {
+      name: "All Posts",
+      href: "/",
+      func: () => {
+        getPosts();
+      },
+    },
+    {
+      name: "Search For a User",
+      href: "#",
+      func: () => {
+        searchUser();
+      },
+    },
   ];
   if (myInfoState.isLoggedIn) {
-    navigationLinks.push(    
+    navigationLinks.push(
       { name: "Following", href: "/following" },
-      { name: myInfoState.myInfo.username, href: `/profile/${myInfoState.myInfo.username}` },
-      { name: "Log out", href: "/" , func: ()=>{logout()}},
-    )
+      {
+        name: myInfoState.myInfo.username,
+        href: `/profile/${myInfoState.myInfo.username}`,
+      },
+      {
+        name: "Log out",
+        href: "/",
+        func: () => {
+          logout();
+        },
+      }
+    );
   } else {
     navigationLinks.push(
       { name: "Log In", href: "/login" },
-      { name: "Register", href: "/register" },
-    )
+      { name: "Register", href: "/register" }
+    );
   }
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
   const handleCloseModel = () => setOpenModel(false);
   return (
     <AppBar position="sticky" color="default">
-
       <Modal
         open={openModel}
         onClose={handleCloseModel}
@@ -109,18 +126,15 @@ export default function Header() {
       </Modal>
 
       <Container maxWidth="md">
-
         <ToolBar disableGutters>
-
           <Avatar style={avatarStyle}>Network</Avatar>
-          {myInfoState.infoIsLoading ?
-            <Skeleton width={300} height={80} /> :
-
+          {myInfoState.infoIsLoading ? (
+            <Skeleton width={300} height={80} />
+          ) : (
             <Hidden mdDown>
               {navigationLinks.map((item) => (
-
                 <Link
-                style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: "none" }}
                   to={item.href}
                   key={item.name}
                 >
@@ -129,17 +143,14 @@ export default function Header() {
                     color="textPrimary"
                     variant="button"
                     underline="none"
-                    onClick={item.func ? item.func : undefined }
+                    onClick={item.func ? item.func : undefined}
                   >
                     {item.name}
                   </Button>
                 </Link>
-
-
               ))}
             </Hidden>
-
-          }
+          )}
 
           <Hidden mdUp>
             <IconButton onClick={() => setOpen(true)}>
@@ -168,13 +179,13 @@ export default function Header() {
         <List>
           {navigationLinks.map((item) => (
             <ListItem key={item.name}>
-              <Link style={{ textDecoration: 'none' }} to={item.href}>
+              <Link style={{ textDecoration: "none" }} to={item.href}>
                 <Button
                   style={linkStyle}
                   color="textPrimary"
                   variant="button"
                   underline="none"
-                  onClick={item.func ? item.func : undefined }
+                  onClick={item.func ? item.func : undefined}
                 >
                   {item.name}
                 </Button>

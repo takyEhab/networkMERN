@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,20 +12,22 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { api } from "./axios";
-import { logIn } from "./store/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+
+import api from "../axios";
+import { logIn } from "../store/actions";
 
 const theme = createTheme();
 
-export default function SignUp(props) {
+export default function Register(props) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
 
-  const [error, setError] = React.useState({
+  const [error, setError] = useState({
     message: "",
     close: false,
     isError: false,
@@ -33,8 +35,12 @@ export default function SignUp(props) {
 
   const register = async (username, password, password2) => {
     try {
-      let res = await api.post("user/register/", { username, password, password2 });
-      const config ={ headers: { 'x-access-token': res.data.token } };
+      let res = await api.post("user/register/", {
+        username,
+        password,
+        password2,
+      });
+      const config = { headers: { "x-access-token": res.data.token } };
       localStorage.setItem("CONFIG", JSON.stringify(config));
       dispatch(logIn(res.data.user, config));
 
@@ -94,17 +100,6 @@ export default function SignUp(props) {
                 />
               </Grid>
 
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  type='email'
-                  autoComplete="email"
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
