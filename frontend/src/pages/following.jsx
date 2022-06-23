@@ -9,6 +9,7 @@ function Following() {
   const CONFIG = useSelector((state) => state.myInfoState.CONFIG);
 
   useEffect(() => {
+    dispatch(removePosts());
     api
       .get(`/posts/following/`, CONFIG)
       .then((res) => {

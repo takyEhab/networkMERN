@@ -27,6 +27,25 @@ export default function Posts() {
 
   return (
     <Fragment>
+      <Slide
+        direction="up"
+        in={postsState.error !== ""}
+        mountOnEnter
+        unmountOnExit
+      >
+        <Alert
+          sx={{
+            margin: "auto",
+            width: "40%",
+            marginTop: "1%",
+          }}
+          severity="error"
+        >
+          <AlertTitle>Error</AlertTitle>
+          {postsState.error}
+        </Alert>
+      </Slide>
+ 
       {postsState.posts !== null &&
         postsState.error === "" &&
         postsState.posts
@@ -46,25 +65,6 @@ export default function Posts() {
           onChange={handleChange}
         />
       )}
-
-      <Slide
-        direction="up"
-        in={postsState.error !== ""}
-        mountOnEnter
-        unmountOnExit
-      >
-        <Alert
-          sx={{
-            margin: "auto",
-            width: "40%",
-            marginTop: "1%",
-          }}
-          severity="error"
-        >
-          <AlertTitle>Error</AlertTitle>
-          {postsState.error}
-        </Alert>
-      </Slide>
     </Fragment>
   );
 }

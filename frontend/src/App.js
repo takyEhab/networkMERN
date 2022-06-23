@@ -7,12 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { logIn, error, logOut, setData, removePosts } from "./store/actions";
 import { useSnackbar } from "notistack";
 import api from "./axios";
-
+import './App.css'
+const Home = lazy(() => import("./pages/Home"));
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
 const Following = lazy(() => import("./pages/following"));
 const Profile = lazy(() => import("./pages/Profile"));
-const Home = lazy(() => import("./pages/Home"));
+const Chats = lazy(() => import("./pages/Chats"));
 
 export default function App() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
+    dispatch(removePosts());
     getPosts();
     api
       .get("user/profile/", CONFIG)
@@ -76,6 +78,20 @@ export default function App() {
             </Route>
             <Route exact path="/profile/:name" component={Profile} />
             <Route exact path="/following" component={Following} />
+            <Route exact path="/chats" component={Chats} />
+            <Route>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
+                  fontSize: "60px",
+                }}
+              >
+                404 Page Not Found
+              </div>
+            </Route>
             <Route exact path="/register">
               <Register />
             </Route>

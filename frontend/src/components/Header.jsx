@@ -18,12 +18,12 @@ import api from "../axios";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import Search from "./SearchUser";
 import ListItem from "@mui/material/ListItem";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../store/actions";
-import Search from "./SearchBar";
 import { funcContext } from "../context";
+import AccountAvatar from "./AccountAvatar";
 
 const avatarStyle = {
   marginRight: "auto",
@@ -40,7 +40,7 @@ const avatarStyle = {
 const linkStyle = {
   marginLeft: 20,
 };
-const style = {
+const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -51,7 +51,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 export default function Header() {
   const myInfoState = useSelector((state) => state.myInfoState);
   const dispatch = useDispatch();
@@ -86,17 +85,18 @@ export default function Header() {
   if (myInfoState.isLoggedIn) {
     navigationLinks.push(
       { name: "Following", href: "/following" },
-      {
-        name: myInfoState.myInfo.username,
-        href: `/profile/${myInfoState.myInfo.username}`,
-      },
-      {
-        name: "Log out",
-        href: "/",
-        func: () => {
-          logout();
-        },
-      }
+      { name: "Chats", href: "/chats" }
+      // {
+      //   name: myInfoState.myInfo.username,
+      //   href: `/profile/${myInfoState.myInfo.username}`,
+      // },
+      // {
+      //   name: "Log out",
+      //   href: "/",
+      //   func: () => {
+      //     logout();
+      //   },
+      // }
     );
   } else {
     navigationLinks.push(
@@ -107,6 +107,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
   const handleCloseModel = () => setOpenModel(false);
+
   return (
     <AppBar position="sticky" color="default">
       <Modal
@@ -115,7 +116,7 @@ export default function Header() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Search for a USER
           </Typography>
@@ -131,25 +132,28 @@ export default function Header() {
           {myInfoState.infoIsLoading ? (
             <Skeleton width={300} height={80} />
           ) : (
-            <Hidden mdDown>
-              {navigationLinks.map((item) => (
-                <Link
-                  style={{ textDecoration: "none" }}
-                  to={item.href}
-                  key={item.name}
-                >
-                  <Button
-                    style={linkStyle}
-                    color="textPrimary"
-                    variant="button"
-                    underline="none"
-                    onClick={item.func ? item.func : undefined}
+            <>
+              <Hidden mdDown>
+                {navigationLinks.map((item) => (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to={item.href}
+                    key={item.name}
                   >
-                    {item.name}
-                  </Button>
-                </Link>
-              ))}
-            </Hidden>
+                    <Button
+                      style={linkStyle}
+                      color="textPrimary"
+                      variant="button"
+                      underline="none"
+                      onClick={item.func ? item.func : undefined}
+                    >
+                      {item.name}
+                    </Button>
+                  </Link>
+                ))}
+              </Hidden>
+              {myInfoState.isLoggedIn && <AccountAvatar />}
+            </>
           )}
 
           <Hidden mdUp>

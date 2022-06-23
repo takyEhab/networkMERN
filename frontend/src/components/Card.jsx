@@ -26,6 +26,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Zoom from "@mui/material/Zoom";
+import generateProfileColor from "../generateProfileColor";
 
 const cardStyle = {
   textAlign: "center",
@@ -77,18 +78,6 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const generateColor = (str) => {
-  var hash = 0;
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  var color = "#";
-  for (var j = 0; j < 3; j++) {
-    var value = (hash >> (j * 8)) & 0xff;
-    color += ("00" + value.toString(16)).substr(-2);
-  }
-  return color;
-};
 
 export default function PostsCard(props) {
   const dispatch = useDispatch();
@@ -212,7 +201,7 @@ export default function PostsCard(props) {
               to={`/profile/${props.post.writer}`}
             >
               <Avatar
-                sx={{ bgcolor: generateColor(props.post.writer) }}
+                sx={{ bgcolor: generateProfileColor(props.post.writer) }}
                 aria-label="recipe"
               >
                 {props.post.writer.charAt(0).toUpperCase()}

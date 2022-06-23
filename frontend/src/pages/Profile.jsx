@@ -16,15 +16,17 @@ export default function Profile({ match }) {
   const [isSame, setIsSame] = useState(false);
 
   useEffect(() => {
+    dispatch(removePosts());
     api
       .get(`/posts/user/${match.params.name}/`)
       .then((res) => {
         setUser(res.data.user);
         dispatch(setData(res.data.userPosts));
       })
-      .catch((err) =>
-        dispatch(error(err.response.data ? err.response.data : null))
-      );
+      .catch((err) => {
+        setUser(null);
+        dispatch(error(err.response.data ? err.response.data : null));
+      });
     return () => dispatch(removePosts());
   }, [match.params.name]);
 
@@ -42,22 +44,24 @@ export default function Profile({ match }) {
     setUser(data.user);
     setFollowed(!isFollowed);
   };
-
+  console.log(user);
   return (
+
     <Fragment>
       {user !== "loading" ? (
+        user &&
         <>
-          <h1>{user && user.username}</h1>
-          <h1>followers :{user && user.followers.length}</h1>
-          <h1>following :{user && user.following.length}</h1>
+          <h1>{user.username}</h1>
+          <h1>followers :{user.followers.length}</h1>
+          <h1>following :{user.following.length}</h1>
+          {!isSame && (
+            <Button onClick={() => handleClick(user._id)} variant="contained">
+              {isFollowed ? "Unfollow" : "Follow"}
+            </Button>
+          )}
         </>
       ) : (
         <CircularProgress />
-      )}
-      {!isSame && (
-        <Button onClick={() => handleClick(user._id)} variant="contained">
-          {isFollowed ? "Unfollow" : "Follow"}
-        </Button>
       )}
 
       <br />
