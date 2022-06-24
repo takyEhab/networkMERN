@@ -72,6 +72,8 @@ router.delete("/:id", verifyToken, async (req, res) => {
       : res.status(500).json({ message: err.message });
   }
 });
+
+// like post
 router.patch("/like/:id", verifyToken, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);

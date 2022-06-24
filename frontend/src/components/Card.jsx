@@ -27,6 +27,7 @@ import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Zoom from "@mui/material/Zoom";
 import generateProfileColor from "../generateProfileColor";
+import { format } from 'timeago.js';
 
 const cardStyle = {
   textAlign: "center",
@@ -190,7 +191,6 @@ export default function PostsCard(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <Zoom in={true}>
       <Card style={cardStyle} sx={{ maxWidth: 550 }}>
@@ -225,7 +225,7 @@ export default function PostsCard(props) {
             ))
           }
           title={props.post.writer}
-          subheader={props.post.created_at}
+          subheader={format(props.post.createdAt)}
         />
         <StyledMenu
           id="demo-customized-menu"

@@ -79,6 +79,13 @@ export default function App() {
             <Route exact path="/profile/:name" component={Profile} />
             <Route exact path="/following" component={Following} />
             <Route exact path="/chats" component={Chats} />
+           
+            <Route exact path="/register">
+              <Register />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
             <Route>
               <div
                 style={{
@@ -91,12 +98,6 @@ export default function App() {
               >
                 404 Page Not Found
               </div>
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
-            <Route exact path="/login">
-              <Login />
             </Route>
           </Switch>
         </Suspense>

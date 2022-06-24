@@ -2,6 +2,7 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { format } from 'timeago.js';
 import generateProfileColor from "../generateProfileColor";
 
 export default function Message({ own }) {
@@ -37,7 +38,7 @@ export default function Message({ own }) {
       </Box>
 
       <Typography sx={{ opacity: "0.5", fontSize: "15px", marginTop: 1 }}>
-        1 hour ago
+       {format("")}
       </Typography>
     </Box>
   );
