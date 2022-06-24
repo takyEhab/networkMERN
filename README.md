@@ -7,3 +7,4 @@ React.js
 Redux
 Matirial Ui library
 Socket.io
+Docker
