@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { funcContext } from "../context";
 import Posts from "../components/Posts";
 import { error, removePosts, setData } from "../store/actions";
+import { Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
 
 export default function Profile({ match }) {
   const { follow } = useContext(funcContext);
@@ -14,6 +17,9 @@ export default function Profile({ match }) {
   const [user, setUser] = useState("loading");
   const [isFollowed, setFollowed] = useState(false);
   const [isSame, setIsSame] = useState(false);
+  const [isConversation, setIsConversation] = useState(true);
+  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(removePosts());
@@ -27,6 +33,7 @@ export default function Profile({ match }) {
         setUser(null);
         dispatch(error(err.response.data ? err.response.data : null));
       });
+
     return () => dispatch(removePosts());
   }, [match.params.name]);
 
@@ -36,6 +43,17 @@ export default function Profile({ match }) {
       myInfoState.myInfo.following.forEach((item) => {
         if (item.user === match.params.name) setFollowed(true);
       });
+      api
+        .get(`/conversation/mine`, myInfoState.CONFIG)
+        .then((res) => {
+          res.data.length === 0 && setIsConversation(false);
+          res.data.forEach((item) => {
+            setIsConversation(item.participants.includes(match.params.name));
+          });
+        })
+        .catch((err) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        });
     }
   }, [myInfoState.myInfo, match.params.name]);
 
@@ -44,27 +62,51 @@ export default function Profile({ match }) {
     setUser(data.user);
     setFollowed(!isFollowed);
   };
-  console.log(user);
-  return (
 
+  const startConversation = async () => {
+    api
+      .post(`/conversation`, { receiver: user?.username }, myInfoState.CONFIG)
+      .then((res) => {
+        history.push("/chats");
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
+  return (
     <Fragment>
       {user !== "loading" ? (
-        user &&
-        <>
-          <h1>{user.username}</h1>
-          <h1>followers :{user.followers.length}</h1>
-          <h1>following :{user.following.length}</h1>
-          {!isSame && (
-            <Button onClick={() => handleClick(user._id)} variant="contained">
-              {isFollowed ? "Unfollow" : "Follow"}
-            </Button>
-          )}
-        </>
+        user && (
+          <>
+            <Typography variant="h4" component="div" p={1}>
+              {user.username}
+              <br />
+              followers :{user.followers.length}
+              <br />
+              following :{user.following.length}
+            </Typography>
+            {!isSame && (
+              <>
+                <Button
+                  onClick={() => handleClick(user._id)}
+                  sx={{ marginRight: "20px" }}
+                  variant="contained"
+                >
+                  {isFollowed ? "Unfollow" : "Follow"}
+                </Button>
+                {!isConversation && (
+                  <Button onClick={startConversation} variant="contained">
+                    Start a conversation
+                  </Button>
+                )}
+              </>
+            )}
+          </>
+        )
       ) : (
         <CircularProgress />
       )}
 
-      <br />
       <Posts />
     </Fragment>
   );

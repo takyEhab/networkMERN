@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Box, Button, TextareaAutosize } from "@mui/material";
+import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
@@ -10,7 +10,8 @@ import { useSnackbar } from "notistack";
 
 export default function Chats() {
   const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState(null);
+  const [conversation, setConversation] = useState(null)
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const myInfoState = useSelector((state) => state.myInfoState);
@@ -19,6 +20,7 @@ export default function Chats() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   useEffect(() => {
     api
       .get(`/conversation/mine`, myInfoState.CONFIG)
@@ -49,7 +51,7 @@ export default function Chats() {
     api
       .post(
         `/message`,
-        { conversationId: messages[0].conversationId, text: message },
+        { conversationId: conversation._id, text: message },
         myInfoState.CONFIG
       )
       .then((res) => {
@@ -71,12 +73,16 @@ export default function Chats() {
           padding={1}
           height="100%"
         >
+          <Typography mt={1} sx={{ fontSize: "15px", fontWeight: "1000" }}>
+            My conversations
+          </Typography>
           {conversations.map((conversation) => (
             <div
               key={conversation._id}
               onClick={() => {
                 console.log(conversation);
                 getMessages(conversation._id);
+                setConversation(conversation)
               }}
             >
               <Conversation
@@ -91,7 +97,7 @@ export default function Chats() {
         </Box>
       </Box>
       <Box flex={10}>
-        {messages && (
+        {conversation && (
           <Box height="100%" display="flex" flexDirection="column" padding={1}>
             <Box pr={2} sx={{ overflowY: "scroll" }}>
               {messages.map((message) => (
