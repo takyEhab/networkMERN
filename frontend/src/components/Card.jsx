@@ -27,7 +27,7 @@ import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Zoom from "@mui/material/Zoom";
 import generateProfileColor from "../generateProfileColor";
-import { format } from 'timeago.js';
+import { format } from "timeago.js";
 
 const cardStyle = {
   textAlign: "center",
@@ -78,7 +78,6 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
-
 
 export default function PostsCard(props) {
   const dispatch = useDispatch();

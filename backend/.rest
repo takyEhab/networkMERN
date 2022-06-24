@@ -12,7 +12,7 @@ POST http://localhost:8000/user/login
 content-type: application/json
 
 {
-  "username": "saif",
+  "username": "taky",
   "password": "123"
 }
 
@@ -69,11 +69,11 @@ GET http://localhost:8000/posts/user/saif
 
 ###
 POST http://localhost:8000/conversation
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJiNWFmMmFkYjE4YjE5YmIwM2NmNjBmIiwidXNlcm5hbWUiOiJzYWlmIiwiaWF0IjoxNjU2MDc0MTY0LCJleHAiOjE2NTYzMzMzNjR9.F_TD2ye_p5pzwsaAi2LPs20pD5g9orNa70GpaOE8CHQ
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJiNDM2NTgxNjA3YWMzNTUzMjY1M2Q1IiwidXNlcm5hbWUiOiJ0YWt5IiwiaWF0IjoxNjU2MDgzMTY5LCJleHAiOjE2NTYzNDIzNjl9.Yzp15-AevkjMFSq8wtNJAdSkx50XHK8EGPSWqC4oUjo
 content-type: application/json
 
 {
-  "receiver": "taky"
+  "receiver": "saif"
 }
 ###
 GET  http://localhost:8000/conversation/mine
@@ -85,8 +85,8 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJiNWFmMmF
 content-type: application/json
 
 {
-  "conversationId": "62b5b390a864adad1891246b",
-  "text":"fa"
+  "conversationId": "62b5d300f6b5c86d57fc85a7",
+  "text":"hello saif iam taky"
 }
 ###
 GET  http://localhost:8000/message/62b5b390a864adad1891246b
