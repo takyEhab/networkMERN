@@ -1,2 +1,9 @@
 # networkMERN
-social network app with MERN Stack
+social network app built with: 
+Mongodb
+Express.js
+Node.js
+React.js
+Redux
+Matirial Ui library
+Socket.io
