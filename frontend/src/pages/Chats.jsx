@@ -7,16 +7,44 @@ import Conversation from "../components/Conversation";
 import Message from "../components/Message";
 import api from "../axios";
 import { useSnackbar } from "notistack";
+import { io } from "socket.io-client";
 
 export default function Chats() {
   const [conversations, setConversations] = useState([]);
-  const [conversation, setConversation] = useState(null)
+  const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const myInfoState = useSelector((state) => state.myInfoState);
   const scrollRef = useRef();
+  const socket = useRef();
 
+  useEffect(() => {
+    socket.current = io("ws://localhost:5000");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderName,
+        text: data.message,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      conversation?.participants.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, conversation]);
+
+  useEffect(() => {
+    myInfoState.myInfo &&
+      socket.current.emit("addUser", myInfoState.myInfo.username);
+    // socket.current.on("users", (users) => {
+    //   console.log(users);
+    // });
+  }, [myInfoState.myInfo]);
+  
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -37,7 +65,6 @@ export default function Chats() {
       api
         .get(`/message/${id}`, myInfoState.CONFIG)
         .then((res) => {
-          console.log(res.data);
           setMessages(res.data);
         })
         .catch((err) => {
@@ -48,6 +75,16 @@ export default function Chats() {
   );
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const receiverName = conversation.participants.find(
+      (name) => name !== myInfoState.myInfo.username
+    );
+    socket.current.emit("sentMessage", {
+      senderName: myInfoState.myInfo?.username,
+      receiverName,
+      message,
+    });
+
     api
       .post(
         `/message`,
@@ -80,17 +117,14 @@ export default function Chats() {
             <div
               key={conversation._id}
               onClick={() => {
-                console.log(conversation);
                 getMessages(conversation._id);
-                setConversation(conversation)
+                setConversation(conversation);
               }}
             >
               <Conversation
-                username={
-                  conversation.participants.filter(
-                    (name) => name !== myInfoState.myInfo.username
-                  )[0]
-                }
+                username={conversation.participants.find(
+                  (name) => name !== myInfoState.myInfo?.username
+                )}
               />
             </div>
           ))}

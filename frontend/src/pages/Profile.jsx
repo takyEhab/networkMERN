@@ -66,9 +66,7 @@ export default function Profile({ match }) {
   const startConversation = async () => {
     api
       .post(`/conversation`, { receiver: user?.username }, myInfoState.CONFIG)
-      .then((res) => {
-        history.push("/chats");
-      })
+      .then((res) => history.push("/chats"))
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -81,9 +79,9 @@ export default function Profile({ match }) {
             <Typography variant="h4" component="div" p={1}>
               {user.username}
               <br />
-              followers :{user.followers.length}
+              Followers :{user.followers.length}
               <br />
-              following :{user.following.length}
+              Following :{user.following.length}
             </Typography>
             {!isSame && (
               <>
