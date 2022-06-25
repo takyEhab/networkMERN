@@ -8,3 +8,9 @@ Redux
 Matirial Ui library
 Socket.io
 Docker
+
+with following users, adding post, liking posts, chat with users ,search users 
+
+next making chat ui better "no messages"
+next post photos 
+next notifications
