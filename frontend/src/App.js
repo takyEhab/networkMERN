@@ -10,6 +10,7 @@ import './App.css'
 import Header from "./components/Header";
 import Loading from "./components/Loading";
 import PrimarySearchAppBar from "./components/AppBar";
+import NotFound from "./components/NotFound";
 
 const Home = lazy(() => import("./pages/Home"));
 const Register = lazy(() => import("./pages/Register"));
@@ -89,19 +90,7 @@ export default function App() {
             <Route exact path="/login">
               <Login />
             </Route>
-            <Route>
-              <div
-                style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  fontSize: "60px",
-                }}
-              >
-                404 Page Not Found
-              </div>
-            </Route>
+            <Route component={NotFound}/>
           </Switch>
         </Suspense>
       </funcContext.Provider>
