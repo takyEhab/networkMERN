@@ -11,6 +11,7 @@ Docker
 
 with following users, adding post, liking posts, chat with users ,search users 
 
-next making chat ui better "no messages"
+change AppBar and Unread messages 
+next making chat ui better when no messages and info text.
+next notifications and make unRead notifications
 next post photos 
-next notifications

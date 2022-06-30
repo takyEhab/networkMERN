@@ -1,5 +1,5 @@
 const express = require("express");
-const verifyToken = require("../middleware/auth");
+const verifyToken = require("../services/auth");
 const router = express.Router();
 const Conversation = require("../models/conversation");
 const User = require("../models/user");

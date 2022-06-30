@@ -1,13 +1,16 @@
 import React, { lazy, useEffect, useCallback, Suspense } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { funcContext } from "./context";
-import Header from "./components/Header";
-import Loading from "./components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn, error, logOut, setData, removePosts } from "./store/actions";
 import { useSnackbar } from "notistack";
 import api from "./axios";
 import './App.css'
+
+import Header from "./components/Header";
+import Loading from "./components/Loading";
+import PrimarySearchAppBar from "./components/AppBar";
+
 const Home = lazy(() => import("./pages/Home"));
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
