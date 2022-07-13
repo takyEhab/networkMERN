@@ -15,6 +15,14 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { Link } from "react-router-dom";
+import { Avatar, Button, Modal } from "@mui/material";
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ChatIcon from '@mui/icons-material/Chat';
+import SearchModal from "./SearchUser";
+import { useHistory } from "react-router-dom";
+import AccountAvatar from "./AccountAvatar";
+import { useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -55,10 +63,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [openModel, setOpenModel] = React.useState(false);
+  const history = useHistory();
+  const isLoggedIn = useSelector((state) => state.myInfoState.isLoggedIn);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -80,6 +102,11 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleCloseModel = () => setOpenModel(false);
+
+  const handleClick = () => {
+    setOpenModel(true);
+  }
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -119,46 +146,50 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+      <MenuItem onClick={() => history.push("/chats")}>
+        <IconButton size="large" aria-label="show new chats" color="inherit">
+            <ChatIcon />
         </IconButton>
-        <p>Messages</p>
+        <p>Chats</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => history.push("/following")}>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="following"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
+            <PeopleAltIcon />
         </IconButton>
-        <p>Notifications</p>
+        <p>Following</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <Box sx={{textAlign:'center'}}>
+        {isLoggedIn && <AccountAvatar />}
+      </Box>
+
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Modal
+        open={openModel}
+        onClose={handleCloseModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Search for a USER
+          </Typography>
+          <div id="modal-modal-description" sx={{ mt: 2 }}>
+            <SearchModal closeModel={handleCloseModel} />
+          </div>
+        </Box>
+      </Modal>
+
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -166,56 +197,93 @@ export default function PrimarySearchAppBar() {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
+
+          {/* <Avatar style={{
+  marginRight: "auto",
+  color: "black",
+  backgroundColor: "white",
+  borderRadius: 0,
+  height: 30,
+  width: 100,
+  border: "2px solid gray",
+  borderLeft: "12px solid transparent",
+  borderRight: "12px solid transparent",
+}}>Network</Avatar> */}
+
+          
           <Typography
             variant="h6"
             noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            component={Link}
+            sx={{
+              display: { xs: "none", sm: "block" },
+              textDecoration: "none",
+              boxShadow: "none",
+              color: "white",
+              fontVariantCaps: "all-small-caps"
+            }}
+            to="/"
           >
-            MUI
+            Network
           </Typography>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              // placeholder="Search for a user…"
+              value="Search for a user…"
+              style={{color:'lightgray'}}
+        onClick={handleClick}
+
+              readOnly={true}
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {isLoggedIn ?
+              <>
+                <IconButton
+                  size="large"
+                  aria-label="show new chats"
+                  color="inherit"
+                  onClick={() => history.push("/chats")}
+                >
+                  <ChatIcon />
+                </IconButton>
+                <IconButton
+                  size="large"
+                  aria-label="following"
+                  color="inherit"
+                  onClick={() => history.push("/following")}
+                >
+                  <PeopleAltIcon />
+                </IconButton>
+                <AccountAvatar />
+                {/* {isLoggedIn && <AccountAvatar />} */}
+              </>
+              : <>
+              <Button onClick={() => history.push("/login")} color="inherit">Login</Button>
+              <Button onClick={() => history.push("/register")} color="inherit">Register</Button>
+              </>
+              // {/* <IconButton
+              //   size="large"
+              //   edge="end"
+              //   aria-label="account of current user"
+              //   aria-controls={menuId}
+              //   aria-haspopup="true"
+              //   onClick={handleProfileMenuOpen}
+              //   color="inherit"
+              // >
+              //   <AccountCircle />
+              // </IconButton> */}
+
+            }
           </Box>
+            
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"

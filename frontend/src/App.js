@@ -26,8 +26,6 @@ export default function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    dispatch(removePosts());
-    getPosts();
     api
       .get("user/profile/", CONFIG)
       .then((info) => {
@@ -36,7 +34,6 @@ export default function App() {
       .catch(() => {
         dispatch(logOut());
       });
-    return () => dispatch(removePosts());
   }, []);
 
   const getPosts = useCallback(() => {
@@ -73,8 +70,8 @@ export default function App() {
   return (
     <Router>
       <funcContext.Provider value={ProviderValue}>
-        <Header />
-
+        {/* <Header /> */}
+        <PrimarySearchAppBar /> 
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path="/">

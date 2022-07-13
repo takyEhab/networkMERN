@@ -69,7 +69,6 @@ export default function Register(props) {
     register(data.get("username"), data.get("password"), data.get("password2"));
   };
   return (
-    <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -148,6 +147,5 @@ export default function Register(props) {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
   );
 }

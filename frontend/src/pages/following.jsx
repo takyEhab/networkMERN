@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import api from "../axios";
 import { useDispatch, useSelector } from "react-redux";
 import Posts from "../components/Posts";
 import { error, removePosts, setData } from "../store/actions";
+import { CssBaseline } from "@mui/material";
 
 function Following() {
   const dispatch = useDispatch();
@@ -21,6 +22,11 @@ function Following() {
       });
     return () => dispatch(removePosts());
   }, []);
-  return <Posts />;
+  return (
+    <Fragment>
+      <CssBaseline />
+      <Posts />
+    </Fragment>
+  );
 }
 export default Following;

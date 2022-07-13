@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
+import { Box, Button, CssBaseline, TextareaAutosize, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
@@ -102,6 +102,8 @@ export default function Chats() {
   };
   return (
     <Box display="flex" overflow="hidden" height="86vh">
+      <CssBaseline />
+
       <Box flex={2}>
         <Box
           sx={{

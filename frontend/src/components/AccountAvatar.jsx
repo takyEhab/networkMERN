@@ -47,7 +47,6 @@ export default function AccountMenu(props) {
         <IconButton
           onClick={handleClick}
           size="small"
-          sx={{ ml: 2 }}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
@@ -106,13 +105,7 @@ export default function AccountMenu(props) {
           <Avatar /> My Profile
         </MenuItem>
 
-        <Divider />
-        <MenuItem onClick={() => history.push(`/`)}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
+
         <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize="small" />
