@@ -12,8 +12,5 @@ Docker
 with following users, adding post, liking posts, chat with users ,search users 
 
 
-hosted on heroku 
-
-[website link](https://network-taky.herokuapp.com)
 
  
